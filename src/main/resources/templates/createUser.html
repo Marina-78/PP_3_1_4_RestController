@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create user</title>
+</head>
+<body>
+<style>
+    form {
+        background-color: silver;
+        width: 150%;
+        margin: 0 auto;
+        padding: 50px;
+    }
+</style>
+<form method="post" th:action="@{/admin/createUser}">
+    <h2>CREATE USER</h2>
+    <label for="firstName">FIRSTNAME</label>
+    <input th:name="firstName" type="text" id="firstName">
+    <br/>
+    <label for="lastName">LASTNAME</label>
+    <input th:name="lastName" type="text" id="lastName">
+    <br/>
+    <label for="email">EMAIL</label>
+    <input th:name="email" type="text" id="email">
+    <br/>
+    <label for="age">AGE</label>
+    <input th:name="age" type="text" id="age">
+    <br/>
+    <label for="role">ROLE</label>
+    <select th:name="roles" size="3" multiple id="role">
+        <option value="">Выберите значение</option>
+        <option selected value="ROLE_ADMIN">ROLE_ADMIN</option>
+        <option selected value="ROLE_USER">ROLE_USER</option>
+    </select>
+    <br/>
+    <label for="password">PASSWORD</label>
+    <input th:name="password" type="text" id="password">
+    <br/>
+    <input type="submit" value="Create User" style="background-color: rosybrown"/>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out" style="background-color: rosybrown"/>
+    </form>
+</form>
+</body>
+</html>

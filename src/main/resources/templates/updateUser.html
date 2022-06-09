@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Update user</title>
+</head>
+<body>
+<style>
+    form {
+        background-color: silver;
+        width: 150%;
+        margin: 0 auto;
+        padding: 50px;
+    }
+</style>
+<form th:method="PATCH" th:action="@{/admin/updateUser}" th:object="${user}">
+    <h2>UPDATE USER</h2>
+    <label for="id">ID</label>
+    <input readonly type="number" th:field="*{id}" id="id"/>
+    <br/>
+    <label for="firstName">FIRST NAME</label>
+    <input type="text" th:field="*{firstName}" id="firstName"/>
+    <br/>
+    <label for="lastName">LAST NAME</label>
+    <input type="text" th:field="*{lastName}" id="lastName"/>
+    <br/>
+    <label for="email">EMAIL</label>
+    <input type="text" th:field="*{email}" id="email"/>
+    <br/>
+    <label for="age">AGE</label>
+    <input type="text" th:field="*{age}" id="age"/>
+    <br/>
+    <label for="role">ROLE</label>
+    <select th:name="roles" size="3" multiple id="role">
+        <option value="">Выберите значение</option>
+        <option selected value="ROLE_ADMIN">ROLE_ADMIN</option>
+        <option selected value="ROLE_USER">ROLE_USER</option>
+    </select>
+    <br/>
+    <label for="password">PASSWORD</label>
+    <input type="text" th:field="*{password}" id="password">
+    <br/>
+    <input type="submit" value="Update User" style="background-color: rosybrown"/>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out" style="background-color: rosybrown"/>
+    </form>
+</form>
+</body>
+</html>
