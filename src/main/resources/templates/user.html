@@ -1,35 +1,112 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/security/tags" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <title>HELLO USER!</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style type="text/css">
+        .left_bar {
+            width: 15%;
+        }
+
+        .right_bar {
+            width: 85%;
+        }
+    </style>
+    <title>User page</title>
 </head>
 <body>
-<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
-<table border="1" style="background-color: rosybrown">
-    <tbody>
-    <tr style="background-color: silver">
-        <th><h3 th:text="ID"></h3></th>
-        <th><h3 th:text="FirstName"></h3></th>
-        <th><h3 th:text="LastName"></h3></th>
-        <th><h3 th:text="Email"></h3></th>
-        <th><h3 th:text="Age"></h3></th>
-        <th><h3 th:text="Role"></h3></th>
-        <th><h3 th:text="Password"></h3></th>
-    </tr>
-    <tr style="background-color: silver">
-        <td><a th:text="${user.getId()}">ID</a></td>
-        <td><a th:text="${user.getFirstName()}">firstName</a></td>
-        <td><a th:text="${user.getLastName()}">lastName</a></td>
-        <td><a th:text="${user.getEmail()}">email</a></td>
-        <td><a th:text="${user.getAge()}">age</a></td>
-        <td><a th:text="${user.getRoleNames()}">role</a></td>
-        <td><a th:text="${user.getPassword()}">password</a></td>
-    </tr>
-    </tbody>
-</table>
-<br>
-<form th:action="@{/logout}" method="post">
-    <input type="submit" value="Sign Out" style="background-color: rosybrown"/>
-</form>
+<!--NAVBAR-->
+<nav class="container-fluid navbar navbar-static-top navbar-dark bg-dark">
+    <div class="navbar-brand d-flex justify-content-start mt-3 ml-3">
+        <h5 class="font-weight-bold " th:text="${user.getEmail()}">email</h5>
+        <h5 class="font-weight-light">&nbsp;with roles:&nbsp;</h5>
+        <h5 class="font-weight-light" th:text="${user.getRoleNames()}">Role</h5>
+    </div>
+    <ul class="navbar-nav mt-3 ml-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="/logout">Logout</a>
+        </li>
+    </ul>
+</nav>
+<!--PAGE-->
+<div class="container-fluid tabs">
+    <div class="row">
+        <!--        LEFT BAR-->
+        <ul class="left_bar nav nav-pills flex-column bg-white mt-2 min-vh-100">
+            <li class="nav-item mt-2">
+                <a class="nav-link active" href="#USER" data-toggle="tab">User</a>
+            </li>
+        </ul>
+        <!--        RIGHT BAR -->
+        <div class="right_bar tab-content bg-light mt-10 min-vh-100">
+            <!--        PANEL USER-->
+            <div class="tab-pane" th:classappend="${user.getRoles().size()==1}? 'active'"
+                 sec:authorize="hasRole('USER')" id="USER">
+                <h1 class="font-weight-bold mt-3 ml-5 mb-3">User information-page</h1>
+                <div class="tabs ml-5 mr-5">
+                    <div class="tab-content card mb-5">
+                        <div class="card-header"><h5 class="font-weight-bold">About user</h5></div>
+                        <div class="container-fluid my-3">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th><h6 class="font-weight-bold">ID</h6></th>
+                                    <th><h6 class="font-weight-bold">First Name</h6></th>
+                                    <th><h6 class="font-weight-bold">Last Name</h6></th>
+                                    <th><h6 class="font-weight-bold">Age</h6></th>
+                                    <th><h6 class="font-weight-bold">Email</h6></th>
+                                    <th><h6 class="font-weight-bold">Role</h6></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><h6 class="font-weight-normal" th:text="${user.getId()}">ID</h6></td>
+                                    <td><h6 class="font-weight-normal" th:text="${user.getFirstName()}">First
+                                        Name</h6></td>
+                                    <td><h6 class="font-weight-normal" th:text="${user.getLastName()}">Last
+                                        Name</h6></td>
+                                    <td><h6 class="font-weight-normal" th:text="${user.getAge()}">Age</h6></td>
+                                    <td><h6 class="font-weight-normal" th:text="${user.getEmail()}">Email</h6>
+                                    </td>
+                                    <td><h6 class="font-weight-normal" th:text="${user.getRoleNames()}">
+                                        Role</h6></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+

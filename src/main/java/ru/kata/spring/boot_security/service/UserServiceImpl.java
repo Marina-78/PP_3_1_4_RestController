@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.service;
+package ru.kata.spring.boot_security.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,10 +7,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.kata.spring.boot_security.demo.UserDao.UserDao;
-import ru.kata.spring.boot_security.demo.model.Role;
-import ru.kata.spring.boot_security.demo.model.User;
+import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.UserDao.UserDao;
+import ru.kata.spring.boot_security.model.Role;
+import ru.kata.spring.boot_security.model.User;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,14 +22,15 @@ import java.util.Set;
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
     private UserDao userDao;
+    private PasswordEncoder encoder;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(UserDao userDao, PasswordEncoder encoder) {
         this.userDao = userDao;
+        this.encoder = encoder;
     }
-
-
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userDao.getUserByEmail(email);
         if (userDao == null) {
@@ -46,7 +49,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @Transactional
     public void saveUser(User user, List<String> roles) {
+        user.setPassword(encoder.encode(user.getPassword()));
         user.setRoles(new HashSet<>());
         List<Role> bdRoles = getAllRoles();
         for (Role role : bdRoles) {
@@ -63,6 +68,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @Transactional
     public void editUser(User user, List<String> roles) {
         user.setRoles(new HashSet<>());
         List<Role> bdRoles = getAllRoles();
@@ -75,6 +81,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @Transactional
     public void removeUser(Long id) {
         userDao.removeUser(id);
     }
