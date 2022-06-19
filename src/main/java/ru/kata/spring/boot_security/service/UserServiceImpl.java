@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,11 +22,12 @@ import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
+
     private UserDao userDao;
     private PasswordEncoder encoder;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, PasswordEncoder encoder) {
+    public UserServiceImpl(UserDao userDao, @Lazy PasswordEncoder encoder) {
         this.userDao = userDao;
         this.encoder = encoder;
     }
@@ -70,6 +72,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public void editUser(User user, List<String> roles) {
+        if (!user.getPassword().equals(getUser(user.getId()).getPassword())) {
+            user.setPassword(encoder.encode(user.getPassword()));
+        }
         user.setRoles(new HashSet<>());
         List<Role> bdRoles = getAllRoles();
         for (Role role : bdRoles) {

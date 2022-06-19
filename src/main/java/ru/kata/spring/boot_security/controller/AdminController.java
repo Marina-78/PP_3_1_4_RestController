@@ -28,12 +28,11 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @GetMapping()
+    @GetMapping
     public String allUsers(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         model.addAttribute("user", user);
-        model.addAttribute("userNew", new User());
         model.addAttribute("users", userService.getAllUsers());
         return "admin";
     }
@@ -49,23 +48,15 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @PostMapping()
+    @PostMapping
     public String createUser(@ModelAttribute("user") User user,
                              @RequestParam("roles") List<String> roles) {
         userService.saveUser(user, roles);
         return "redirect:/admin";
     }
 
-    @GetMapping("update/{id}")
-    public String updateUser(@PathVariable("id") Long id, Model model) {
-        User user = userService.getUser(id);
-        model.addAttribute("roles", userService.getAllRoles());
-        model.addAttribute("user", user);
-        return "admin";
-    }
-
-    @PostMapping("/edit")
-    public String updateUser(User user,
+    @PostMapping("/edit/{id}")
+    public String updateUser(@ModelAttribute("user") User user,
                              @RequestParam("roles") List<String> roles) {
         userService.editUser(user, roles);
         return "redirect:/admin";

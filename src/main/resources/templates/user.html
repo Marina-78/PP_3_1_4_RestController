@@ -45,7 +45,7 @@
         <!--        RIGHT BAR -->
         <div class="right_bar tab-content bg-light mt-10 min-vh-100">
             <!--        PANEL USER-->
-            <div class="tab-pane" th:classappend="${user.getRoles().size()==1}? 'active'"
+            <div class="tab-pane active"
                  sec:authorize="hasRole('USER')" id="USER">
                 <h1 class="font-weight-bold mt-3 ml-5 mb-3">User information-page</h1>
                 <div class="tabs ml-5 mr-5">

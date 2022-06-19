@@ -43,14 +43,14 @@
                    data-toggle="tab">Admin</a>
             </li>
             <li class="nav-item mt-2" sec:authorize="hasAuthority('USER')">
-                <a class="nav-link" th:classappend="${user.getRoles().size()==1}? 'active'" aria-selected="false"
+                <a class="nav-link" aria-selected="false"
                    href="#USER"
                    data-toggle="tab">User</a>
             </li>
         </ul>
         <!--        RIGHT BAR -->
         <div class="right_bar tab-content bg-light mt-10 min-vh-100">
-            <div class="tab-pane" id="ADMIN" th:classappend="${user.getRoles().size()>1}? 'active'"
+            <div class="tab-pane active" id="ADMIN"
                  sec:authorize="hasAuthority('ADMIN')">
                 <h1 class="font-weight-bold mt-3 ml-5 mb-3">Admin panel</h1>
                 <div class="tabs ml-5 mr-5">
@@ -102,7 +102,8 @@
                                         </td>
                                         <!--                        EDIT USER-->
                                         <div class="modal fade" th:id="${'modal-1' + user.getId()}">
-                                            <form method="POST" action="/admin/edit">
+                                            <form method="post" th:action="@{/admin/edit/{id}(id=${user.getId()})}"
+                                                  th:object="${user}">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -247,7 +248,7 @@
                             <form method="POST" th:action="@{/admin}">
                                 <div class="form-group col-4 mx-auto text-center">
                                     <label class="font-weight-bold mt-3" for="firstNameNewUser">First Name</label>
-                                    <input class="form-control form-control-sm" type="text" th:name="firstNameNewUser"
+                                    <input class="form-control form-control-sm" type="text" th:name="firstName"
                                            placeholder="First Name" id="firstNameNewUser">
 
                                     <label class="font-weight-bold mt-3" for="lastNameNewUser">Last Name</label>
@@ -284,7 +285,7 @@
                 </div>
             </div>
             <!--        PANEL USER-->
-            <div class="tab-pane" id="USER" th:classappend="${user.getRoles().size()==1}? 'active'"
+            <div class="tab-pane" id="USER"
                  sec:authorize="hasAuthority('USER')" href="#USER">
                 <h1 class="font-weight-bold mt-3 ml-5 mb-3">User information-page</h1>
                 <div class="card ml-5 mr-5">
