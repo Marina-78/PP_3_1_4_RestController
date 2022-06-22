@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.model;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -27,6 +28,8 @@ public class User implements UserDetails {
     private String email;
     private byte age;
     private String password;
+
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = {@JoinColumn(name = "user_id")},
@@ -103,6 +106,7 @@ public class User implements UserDetails {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
     public String getRoleNames() {
         StringBuilder roles = new StringBuilder();
         for (Role role : getRoles()) {

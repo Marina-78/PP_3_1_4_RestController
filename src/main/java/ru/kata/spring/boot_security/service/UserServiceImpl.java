@@ -31,6 +31,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         this.userDao = userDao;
         this.encoder = encoder;
     }
+
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
