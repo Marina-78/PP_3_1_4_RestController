@@ -117,7 +117,7 @@
                                         <option selected value="ROLE_USER">ROLE_USER</option>
                                     </select>
                                     <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary btn-success btn-lg mx-auto">Add new
+                                        <button type="submit" onclick="postNewUser()" class="btn btn-primary btn-success btn-lg mx-auto">Add new
                                             user
                                         </button>
                                     </div>
@@ -197,7 +197,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Edit</button>
+                    <button type="submit" onclick="putEditUser()" class="btn btn-primary">Edit</button>
                 </div>
             </form>
         </div>
@@ -245,7 +245,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <a class="btn btn-danger" type="submit" id="deleteUser">Delete</a>
+                <a class="btn btn-danger" type="submit" onclick="deleteUser()" id="deleteUser">Delete</a>
             </div>
         </div>
     </div>

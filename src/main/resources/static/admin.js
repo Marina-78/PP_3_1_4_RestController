@@ -1,10 +1,10 @@
 $(document).ready(); {
-    AllUsersTable()
-    UserTable()
+    setInterval('getAllUsersTable()', 1000)
+    getUserTable()
 }
 
-function AllUsersTable() {
-    fetch('http://localhost:8181/rest/admin').then(
+function getAllUsersTable() {
+    fetch('http://localhost:8080/api/admin').then(
         response => {
             response.json().then(
                 data => {
@@ -26,8 +26,8 @@ function AllUsersTable() {
         });
 }
 
-function UserTable() {
-    fetch('http://localhost:8181/rest/user').then(
+function getUserTable() {
+    fetch('http://localhost:8080/api/user').then(
         response => {
             response.json().then(
                 data => {
@@ -45,58 +45,57 @@ function UserTable() {
         });
 }
 
-$('#formNewUser').submit(function () {
-    $.post(
-        '/rest/create',
-        $('#formNewUser').serialize(),
-        function (userNew) {
-            document.location.href = userNew;
-        });
-    return false;
-});
+function postNewUser() {
+    fetch('http://localhost:8080/api/create', {
+        method: 'POST',
+        body: new FormData(document.getElementById('formNewUser'))
+    })
+}
 
 function getModalEdit(id) {
-    $.get('/rest/admin/' + id, function (usr) {
-        $('#idEditUser').val(usr.id)
-        $('#firstNameEditUser').val(usr.firstName);
-        $('#lastNameEditUser').val(usr.lastName);
-        $('#ageEditUser').val(usr.age);
-        $('#emailEditUser').val(usr.email);
-        $('#roleDeleteUser').val(usr.roles);
-        $('#passwordEditUser').val(usr.password);
-    });
+    fetch('http://localhost:8080/api/admin/' + id).then(
+        response => {
+            response.json().then(
+                usr => {
+                    $('#idEditUser').val(usr.id)
+                    $('#firstNameEditUser').val(usr.firstName);
+                    $('#lastNameEditUser').val(usr.lastName);
+                    $('#ageEditUser').val(usr.age);
+                    $('#emailEditUser').val(usr.email);
+                    $('#passwordEditUser').val(usr.password);
+                });
+        });
 }
 
-$('#formEdit').submit(function () {
-    $.post(
-        '/rest/edit',
-        $('#formEdit').serialize(),
-        function (editUser) {
-            document.location.href = editUser;
-        });
-    return false;
-});
+function putEditUser() {
+    fetch('http://localhost:8080/api/edit', {
+        method: 'PUT',
+        body: new FormData(document.getElementById('formEdit'))
+    }).then(
+        $('#modalEdit').modal('hide'),
+    )
+}
 
 function getModalDelete(id) {
-    $.get('/rest/admin/' + id, function (usr) {
-        $('#idDeleteUser').val(id);
-        $('#firstNameDeleteUser').val(usr.firstName);
-        $('#lastNameDeleteUser').val(usr.lastName);
-        $('#ageDeleteUser').val(usr.age);
-        $('#emailDeleteUser').val(usr.email);
-        $('#roleDeleteUser').val(usr.roles);
-        $('#passwordDeleteUser').val(usr.password);
-    });
+    fetch('http://localhost:8080/api/admin/' + id).then(
+        response => {
+            response.json().then(
+                usr => {
+                    $('#idDeleteUser').val(usr.id)
+                    $('#firstNameDeleteUser').val(usr.firstName);
+                    $('#lastNameDeleteUser').val(usr.lastName);
+                    $('#ageDeleteUser').val(usr.age);
+                    $('#emailDeleteUser').val(usr.email);
+                    $('#passwordDeleteUser').val(usr.password);
+                });
+        });
 }
 
-$('#modalDelete').click(function () {
+function deleteUser() {
     let id = $('#idDeleteUser').val();
-    $.ajax({
-        url: '/rest/delete/' + id,
-        type: 'DELETE',
-        dataType: 'text',
-    }).done(() => {
-        $('#modalDelete').modal('hide')
-        return AllUsersTable();
-    });
-});
+    fetch('http://localhost:8080/api/delete/' + id, {
+        method: 'DELETE'
+    }).then(
+        $('#modalDelete').modal('hide'),
+    )
+}
